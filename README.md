@@ -9,6 +9,11 @@ A fun CLI tool to track your coding progress with beautiful ASCII art, session t
 
 **Tech Stack:** Python, pyfiglet, colorama, uv
 
+### 🏋️ [Macro Tracker](./macro-tracker/)
+A simple CLI tool to track weight, calories, and macros for fitness goals.
+
+**Tech Stack:** Python, colorama, tabulate, uv
+
 *More experiments coming soon...*
 
 ## 🚀 Getting Started
@@ -39,7 +44,7 @@ uv run main.py
 
 ## 📊 Project Stats
 
-- **Total Projects:** 1
+- **Total Projects:** 2
 - **Languages:** Python
 - **Last Updated:** December 2025
 
