@@ -241,7 +241,6 @@ class HabitHubApp(App):
         border: round $accent 50%;
         padding: 1 2;
         background: $surface-darken-1;
-        margin: auto;
     }
 
     #modal-title {
@@ -299,7 +298,9 @@ class HabitHubApp(App):
         else:
             for index, day in enumerate(dates):
                 label = datetime.fromisoformat(day).strftime("%a %d %b %Y") if _is_iso_date(day) else day
-                list_view.append(ListItem(Label(label), id=day))
+                list_item = ListItem(Label(label))
+                setattr(list_item, "day_key", day)
+                list_view.append(list_item)
             self.selected_date = dates[0]
             list_view.index = 0
         self.update_views()
@@ -326,9 +327,9 @@ class HabitHubApp(App):
     def handle_date_selected(self, event: ListView.Selected) -> None:
         if event.list_view.id != "date-list":
             return
-        item_id = event.item.id
-        if item_id:
-            self.selected_date = item_id
+        selected_day = getattr(event.item, "day_key", None)
+        if selected_day:
+            self.selected_date = selected_day
             self.update_views()
 
     def action_reload(self) -> None:

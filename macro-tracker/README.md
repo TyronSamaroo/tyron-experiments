@@ -59,3 +59,5 @@ The tracker automatically calculates basic macro targets based on your weight an
 - Weight tracking frequency
 
 Happy tracking! 🎉
+
+
