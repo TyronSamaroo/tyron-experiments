@@ -1,19 +1,26 @@
 from fastapi import APIRouter
-from uuid import uuid4
+from sqlmodel import Session, select
+from services.db import engine
 from models.workout import Workout, WorkoutCreate
-
 
 router = APIRouter()
 
-#Store in memory for today
-WORKOUTS = []
 
-@router.post("/workouts", response_model=Workout)
+@router.post("/workouts")
 def create_workout(payload: WorkoutCreate):
-    new_workout = Workout(id=str(uuid4()), **payload.model_dump())
-    WORKOUTS.append(new_workout)
-    return new_workout
+    workout = Workout(**payload.model_dump())
+
+    with Session(engine) as session:
+        session.add(workout)
+        session.commit()
+        session.refresh(workout)
+
+    return workout
+
+
 
 @router.get("/workouts")
 def get_workouts():
-    return WORKOUTS
+    with Session(engine) as session:
+        result = session.exec(select(Workout)).all()
+        return result
