@@ -14,6 +14,16 @@ A simple CLI tool to track weight, calories, and macros for fitness goals.
 
 **Tech Stack:** Python, colorama, tabulate, uv
 
+### 🔁 [Habit Hub](./habit-hub/)
+A simple habit-focused experiment for building consistency one day at a time.
+
+**Tech Stack:** Python, FastAPI, uv
+
+### 💪 [Workout API](./workout-api/)
+A lightweight API experiment for workout and fitness data.
+
+**Tech Stack:** Python, FastAPI, uv
+
 *More experiments coming soon...*
 
 ## 🚀 Getting Started
@@ -42,11 +52,31 @@ uv run main.py
 - Use **modern tooling** (uv, poetry, etc.)
 - Make it **fun** and **educational**
 
+## 🔥 Daily Commit Playbook
+
+If your GitHub graph is looking empty, use this repeatable system:
+
+1. Pick **one tiny daily task** (bug fix, README improvement, small refactor, or test).
+2. Work in a **25-minute focus block** and stop when the task is done.
+3. Commit with a clear message using this pattern:
+   - `feat: add X`
+   - `fix: correct Y`
+   - `docs: improve Z`
+4. Push before ending your session:
+   ```bash
+   git add -A
+   git commit -m "docs: daily progress update"
+   git push
+   ```
+5. Keep a running checklist in an issue or notes file so you always know the next tiny task.
+
+Consistency beats intensity. One useful commit per day is enough to build visible momentum.
+
 ## 📊 Project Stats
 
-- **Total Projects:** 2
+- **Total Projects:** 4
 - **Languages:** Python
-- **Last Updated:** December 2025
+- **Last Updated:** March 2026
 
 ---
 
