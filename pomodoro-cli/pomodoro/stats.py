@@ -1,7 +1,7 @@
-"""Session history formatting and basic aggregations."""
+"""Session history formatting, streak tracking, and daily summary."""
 
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 
 from colorama import Fore, Style, init as colorama_init
 
@@ -58,3 +58,51 @@ def sessions_by_day(sessions: list[Session]) -> dict[date, list[Session]]:
         day = date.fromisoformat(s.started_at[:10])
         result[day].append(s)
     return result
+
+
+def current_streak(sessions: list[Session]) -> int:
+    """
+    Return the number of consecutive calendar days (ending today or yesterday)
+    on which at least one completed work session was logged.
+    """
+    days_with_work = {
+        date.fromisoformat(s.started_at[:10])
+        for s in sessions
+        if s.session_type == "work" and s.completed
+    }
+    if not days_with_work:
+        return 0
+
+    today = date.today()
+    # Allow streak to carry over if no session yet today
+    check = today if today in days_with_work else today - timedelta(days=1)
+    streak = 0
+    while check in days_with_work:
+        streak += 1
+        check -= timedelta(days=1)
+    return streak
+
+
+def daily_summary(sessions: list[Session], target_date: date | None = None) -> str:
+    """Return a one-line summary for a given date (defaults to today)."""
+    target_date = target_date or date.today()
+    by_day = sessions_by_day(sessions)
+    day_sessions = by_day.get(target_date, [])
+
+    completed_work = [s for s in day_sessions if s.session_type == "work" and s.completed]
+    total_mins = sum(s.duration_minutes for s in completed_work)
+    hours, mins = divmod(total_mins, 60)
+
+    date_str = target_date.strftime("%b %d, %Y")
+    pomodoros = len(completed_work)
+
+    if not completed_work:
+        return (
+            f"{Fore.YELLOW}{date_str}: no completed work sessions yet.{Style.RESET_ALL}"
+        )
+
+    return (
+        f"{Fore.GREEN}{Style.BRIGHT}{date_str}:{Style.RESET_ALL} "
+        f"{Fore.RED}{pomodoros} Pomodoro{'s' if pomodoros != 1 else ''}{Style.RESET_ALL} "
+        f"— {hours}h {mins}m of focused work"
+    )

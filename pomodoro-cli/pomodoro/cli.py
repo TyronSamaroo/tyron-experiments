@@ -7,7 +7,7 @@ from colorama import Fore, Style
 
 from pomodoro.config import load_config, save_config, reset_config
 from pomodoro.db import save_session, fetch_sessions, fetch_all_sessions
-from pomodoro.stats import format_history_table, total_work_minutes
+from pomodoro.stats import format_history_table, total_work_minutes, current_streak, daily_summary
 from pomodoro.timer import countdown, SessionType
 
 LABELS = {
@@ -73,6 +73,16 @@ def stats(limit: int):
     """Show session history and total focused time."""
     sessions = fetch_sessions(limit=limit)
     all_sessions = fetch_all_sessions()
+
+    # Daily summary + streak header
+    streak = current_streak(all_sessions)
+    streak_str = (
+        f"{Fore.YELLOW}{Style.BRIGHT}🔥 {streak}-day streak!{Style.RESET_ALL}"
+        if streak > 0
+        else f"{Fore.WHITE}No active streak yet.{Style.RESET_ALL}"
+    )
+    click.echo(f"\n{streak_str}")
+    click.echo(daily_summary(all_sessions))
 
     click.echo("\n--- Recent Sessions ---\n")
     click.echo(format_history_table(sessions))
