@@ -24,6 +24,11 @@ A lightweight API experiment for workout and fitness data.
 
 **Tech Stack:** Python, FastAPI, uv
 
+### 🍅 [Pomodoro CLI](./pomodoro-cli/)
+A terminal-based Pomodoro timer with session history, streak tracking, and configurable durations. Logs every session to SQLite and shows colored progress bars in real time.
+
+**Tech Stack:** Python, Click, Colorama, SQLite, uv
+
 *More experiments coming soon...*
 
 ## 🚀 Getting Started
@@ -74,9 +79,9 @@ Consistency beats intensity. One useful commit per day is enough to build visibl
 
 ## 📊 Project Stats
 
-- **Total Projects:** 4
+- **Total Projects:** 5
 - **Languages:** Python
-- **Last Updated:** March 2026
+- **Last Updated:** April 2026
 
 ---
 
