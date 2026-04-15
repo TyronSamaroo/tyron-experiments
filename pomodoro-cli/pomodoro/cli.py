@@ -3,7 +3,8 @@
 from datetime import datetime
 
 import click
-from pomodoro.db import save_session
+from pomodoro.db import save_session, fetch_sessions, fetch_all_sessions
+from pomodoro.stats import format_history_table, total_work_minutes
 from pomodoro.timer import countdown, SessionType
 
 DEFAULT_DURATIONS = {
@@ -57,6 +58,21 @@ def start(session_type: str):
         click.echo(messages[stype])
     else:
         click.echo("Session cancelled — saved as incomplete.")
+
+
+@main.command()
+@click.option("--limit", default=20, show_default=True, help="Number of recent sessions to show")
+def stats(limit: int):
+    """Show session history and total focused time."""
+    sessions = fetch_sessions(limit=limit)
+    all_sessions = fetch_all_sessions()
+
+    click.echo("\n--- Recent Sessions ---\n")
+    click.echo(format_history_table(sessions))
+
+    total = total_work_minutes(all_sessions)
+    hours, mins = divmod(total, 60)
+    click.echo(f"\nTotal focused time (all time): {hours}h {mins}m across {len(all_sessions)} sessions.\n")
 
 
 if __name__ == "__main__":
