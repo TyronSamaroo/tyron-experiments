@@ -1,9 +1,13 @@
 """Entry point for the pomodoro CLI."""
 
 import click
-from pomodoro.timer import countdown
+from pomodoro.timer import countdown, SessionType
 
-WORK_MINUTES = 25
+DEFAULT_DURATIONS = {
+    SessionType.WORK: 25,
+    SessionType.SHORT_BREAK: 5,
+    SessionType.LONG_BREAK: 15,
+}
 
 
 @click.group()
@@ -13,12 +17,31 @@ def main():
 
 
 @main.command()
-def start():
-    """Start a 25-minute work session."""
-    click.echo(f"Starting {WORK_MINUTES}-minute Pomodoro. Press Ctrl+C to cancel.\n")
-    completed = countdown(WORK_MINUTES * 60, label="Work")
+@click.option("--short", "session_type", flag_value="short_break", help="5-min short break")
+@click.option("--long", "session_type", flag_value="long_break", help="15-min long break")
+@click.option("--work", "session_type", flag_value="work", default=True, help="25-min work session (default)")
+def start(session_type: str):
+    """Start a Pomodoro session (work, short break, or long break)."""
+    stype = SessionType(session_type)
+    minutes = DEFAULT_DURATIONS[stype]
+
+    labels = {
+        SessionType.WORK: "Work",
+        SessionType.SHORT_BREAK: "Short Break",
+        SessionType.LONG_BREAK: "Long Break",
+    }
+    label = labels[stype]
+
+    click.echo(f"Starting {minutes}-min {label} session. Press Ctrl+C to cancel.\n")
+    completed = countdown(minutes * 60, label=label)
+
     if completed:
-        click.echo("Session complete! Take a break.")
+        messages = {
+            SessionType.WORK: "Great work! Time for a break.",
+            SessionType.SHORT_BREAK: "Break over — back to it!",
+            SessionType.LONG_BREAK: "Refreshed? Let's get back to work.",
+        }
+        click.echo(messages[stype])
     else:
         click.echo("Session cancelled.")
 

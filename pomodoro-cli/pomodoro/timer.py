@@ -2,6 +2,13 @@
 
 import sys
 import time
+from enum import Enum
+
+
+class SessionType(str, Enum):
+    WORK = "work"
+    SHORT_BREAK = "short_break"
+    LONG_BREAK = "long_break"
 
 
 def countdown(total_seconds: int, label: str = "Work") -> bool:
