@@ -1,6 +1,9 @@
 """Entry point for the pomodoro CLI."""
 
+from datetime import datetime
+
 import click
+from pomodoro.db import save_session
 from pomodoro.timer import countdown, SessionType
 
 DEFAULT_DURATIONS = {
@@ -33,7 +36,17 @@ def start(session_type: str):
     label = labels[stype]
 
     click.echo(f"Starting {minutes}-min {label} session. Press Ctrl+C to cancel.\n")
+    started_at = datetime.now()
     completed = countdown(minutes * 60, label=label)
+    ended_at = datetime.now()
+
+    save_session(
+        session_type=stype.value,
+        started_at=started_at,
+        ended_at=ended_at,
+        completed=completed,
+        duration_minutes=minutes,
+    )
 
     if completed:
         messages = {
@@ -43,7 +56,7 @@ def start(session_type: str):
         }
         click.echo(messages[stype])
     else:
-        click.echo("Session cancelled.")
+        click.echo("Session cancelled — saved as incomplete.")
 
 
 if __name__ == "__main__":
