@@ -1,6 +1,7 @@
 from datetime import date
+from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from sqlmodel import Session, select
 
 from models.mood import MoodEntry, MoodEntryCreate
@@ -26,9 +27,19 @@ def create_mood(payload: MoodEntryCreate):
 
 
 @router.get("")
-def list_moods():
+def list_moods(
+    start: Optional[date] = Query(default=None),
+    end: Optional[date] = Query(default=None),
+):
+    statement = select(MoodEntry)
+    if start is not None:
+        statement = statement.where(MoodEntry.entry_date >= start)
+    if end is not None:
+        statement = statement.where(MoodEntry.entry_date <= end)
+    statement = statement.order_by(MoodEntry.entry_date.desc())
+
     with Session(engine) as session:
-        return session.exec(select(MoodEntry).order_by(MoodEntry.entry_date.desc())).all()
+        return session.exec(statement).all()
 
 
 @router.get("/{entry_id}")
@@ -38,3 +49,14 @@ def get_mood(entry_id: int):
         if entry is None:
             raise HTTPException(status_code=404, detail="Mood entry not found")
         return entry
+
+
+@router.delete("/{entry_id}")
+def delete_mood(entry_id: int):
+    with Session(engine) as session:
+        entry = session.get(MoodEntry, entry_id)
+        if entry is None:
+            raise HTTPException(status_code=404, detail="Mood entry not found")
+        session.delete(entry)
+        session.commit()
+        return {"deleted": entry_id}
