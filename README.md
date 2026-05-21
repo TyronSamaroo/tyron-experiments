@@ -29,6 +29,11 @@ A terminal-based Pomodoro timer with session history, streak tracking, and confi
 
 **Tech Stack:** Python, Click, Colorama, SQLite, uv
 
+### 🧘 [Mood Journal API](./mood-journal-api/)
+A lightweight FastAPI service for logging daily mood entries with optional notes, date range filtering, and basic CRUD.
+
+**Tech Stack:** Python, FastAPI, SQLModel, SQLite, uv
+
 *More experiments coming soon...*
 
 ## 🚀 Getting Started
@@ -79,9 +84,9 @@ Consistency beats intensity. One useful commit per day is enough to build visibl
 
 ## 📊 Project Stats
 
-- **Total Projects:** 5
+- **Total Projects:** 6
 - **Languages:** Python
-- **Last Updated:** April 2026
+- **Last Updated:** May 2026
 
 ---
 
