@@ -1,7 +1,7 @@
 from datetime import date
 
 from fastapi import APIRouter
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from models.mood import MoodEntry, MoodEntryCreate
 from services.db import engine
@@ -23,3 +23,9 @@ def create_mood(payload: MoodEntryCreate):
         session.refresh(entry)
 
     return entry
+
+
+@router.get("")
+def list_moods():
+    with Session(engine) as session:
+        return session.exec(select(MoodEntry).order_by(MoodEntry.entry_date.desc())).all()
