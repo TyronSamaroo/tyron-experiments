@@ -12,20 +12,24 @@ DEFAULTS = {
 }
 
 
-def load_config() -> dict:
+def load_config() -> dict[str, int]:
     """Load config from disk, falling back to defaults for missing keys."""
     if not CONFIG_PATH.exists():
         return dict(DEFAULTS)
-    with CONFIG_PATH.open() as f:
+    with CONFIG_PATH.open(encoding="utf-8") as f:
         data = json.load(f)
-    # Merge with defaults so new keys always exist
+
+    # Preserve older config files when a new setting is added to DEFAULTS.
     return {**DEFAULTS, **data}
 
 
-def save_config(cfg: dict) -> None:
-    with CONFIG_PATH.open("w") as f:
+def save_config(cfg: dict[str, int]) -> None:
+    """Write config as stable, human-readable UTF-8 JSON."""
+    with CONFIG_PATH.open("w", encoding="utf-8") as f:
         json.dump(cfg, f, indent=2)
+        f.write("\n")
 
 
 def reset_config() -> None:
+    """Replace saved values with a fresh copy of the defaults."""
     save_config(dict(DEFAULTS))
