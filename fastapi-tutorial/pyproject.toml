@@ -1,0 +1,13 @@
+[project]
+name = "fastapi-tutorial"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "email-validator>=2.3.0",
+    "fastapi>=0.118.0",
+    "pydantic>=2.11.9",
+    "typer>=0.19.2",
+    "uvicorn>=0.37.0",
+]

@@ -16,6 +16,16 @@ TYPE_COLORS = {
 }
 
 
+def _session_date(session: Session) -> date:
+    """Return the local calendar date encoded in a stored ISO timestamp.
+
+    Sessions are saved from ``datetime.now().isoformat()``. Reading the date
+    prefix preserves the user's original calendar day without introducing a
+    timezone conversion during streak and summary calculations.
+    """
+    return date.fromisoformat(session.started_at[:10])
+
+
 def _colorize_type(session_type: str) -> str:
     color = TYPE_COLORS.get(session_type, Fore.WHITE)
     label = session_type.replace("_", " ").title()
@@ -55,7 +65,7 @@ def total_work_minutes(sessions: list[Session]) -> int:
 def sessions_by_day(sessions: list[Session]) -> dict[date, list[Session]]:
     result: dict[date, list[Session]] = defaultdict(list)
     for s in sessions:
-        day = date.fromisoformat(s.started_at[:10])
+        day = _session_date(s)
         result[day].append(s)
     return result
 
@@ -66,7 +76,7 @@ def current_streak(sessions: list[Session]) -> int:
     on which at least one completed work session was logged.
     """
     days_with_work = {
-        date.fromisoformat(s.started_at[:10])
+        _session_date(s)
         for s in sessions
         if s.session_type == "work" and s.completed
     }

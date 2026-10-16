@@ -15,7 +15,7 @@ A simple CLI tool to track weight, calories, and macros for fitness goals.
 
 ```bash
 # Install dependencies with uv
-uv install
+uv sync
 
 # Or run directly
 uv run main.py
@@ -59,5 +59,4 @@ The tracker automatically calculates basic macro targets based on your weight an
 - Weight tracking frequency
 
 Happy tracking! 🎉
-
 

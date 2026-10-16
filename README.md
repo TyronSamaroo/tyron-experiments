@@ -39,8 +39,10 @@ Each project has its own README with specific setup instructions. Most Python pr
 # Navigate to any project
 cd project-name
 
-# Install dependencies and run
-uv run main.py
+# Install dependencies
+uv sync
+
+# Run the project-specific command from that project's README
 ```
 
 ## 📝 Adding New Projects
